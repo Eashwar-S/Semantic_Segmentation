@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 
 # Folders to ignore
-./dataset/
+/dataset/*
+/.vscode/
