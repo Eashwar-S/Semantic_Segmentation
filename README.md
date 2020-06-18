@@ -22,9 +22,10 @@ Semantic_Segmentation:
     |          |----> stage1_train
     |
     |
+    |------> NPY files
     |------> LICENSE
     |------> images
-    |------> NPY files
+    |------> Output
     |------> README.md
     |------> logs
 ```
@@ -40,7 +41,7 @@ Loss decreases with increase in number of EPOCHS.
 
 The tensor board outputs can be viewed by clicking this [link](http://localhost:8099/#scalars&runSelectionState=eyJ0cmFpbiI6dHJ1ZSwidmFsaWRhdGlvbiI6dHJ1ZX0%3D)
 ## Output Images:
-The following are few output images obtained from U-net model after training. The left side shows the input image with nuclei. The right side shows the segmented output obtained from U-net highlighting the nuclei.
+The following are few output images obtained from U-net model after training. The left side shows the input image with bacteria. The right side shows the segmented output obtained from U-net highlighting the bacteria.
 
 ![](Output/inputTestImages/input1.jpg)
 ![](Output/outputImages/output1.jpg)
@@ -48,7 +49,7 @@ The following are few output images obtained from U-net model after training. Th
 ![](Output/inputTestImages/input2.jpg)
 ![](Output/outputImages/output2.jpg)
 
-The following gifs shows the shows the segmentation of nuclei.  
+The following gifs shows the shows the segmentation of bacteria.  
 
 ![](Output/gif/input.gif)
 ![](Output/gif/output.gif)
