@@ -314,6 +314,71 @@ The U-net architecture consists of two path. They are:\\
 
 2. Expansion Path: The right half of the U-net where the layers are represented from bottom to top is called expansion path. The expansion path consists of sequence of deconvolution or up-convolution layers and concatenation with high resolution features from the contraction path and unpooling layers. The expansion path gives output data in the same size as the input image data. The expansion path increase the size of the contraction path output data simultaneously decreasing the number of channels.
 
+\section{\textbf{Implementation:}}
+\begin{enumerate}
+\item Language Used: Python 3.8
+
+\item Packages Used: Tensorflow, Numpy, cv2
+
+\item Software Used: Jupyter Notebook
+
+\item Github Link: \url{https://github.com/Eashwar-S/Semantic_Segmentation}
+
+\end{enumerate}
+
+\section{\textbf{Results}}
+Semantic segmentation was performed in two types of datasets namely:
+\begin{enumerate}
+\item Binary class Semantic segmentation: In this the input images contain only two classes and semantic segmentation is performed to separate these two classes.
+
+\item Multi class semantic segmentation: In this the input images contains 32 classes and semantic segmentation is performed to separate 32 classes with different colors.
+\end{enumerate}
+
+\subsection{\textbf{Binary class semantic segmentation results:}}
+The datasets for binary class sematic segmentation were obtained from kaggle[13]. The input contain images of nuclei which needs to be separated from the background. The U-net model was trained to obtain an accuracy of 96.4\% over 13 EPOCHS. The below images shows the segmented results obtained from U-net for training, validation and testing data.
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{binaryclassoutput}
+    \caption{Binary class segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+Thus, U-net performs brilliantly in the case of binary class semantic segmentation. The following graphs shows the accuracy and loss of the model over number of EPOCHS over time.
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=9cm]{accu1}
+    \caption{Model loss and accuracy}
+    \label{fig:}
+\end{figure}
+
+\subsection{\textbf{Multi class semantic segmentation results:}}
+The datasets for binary class semantic segmentation were obtained from kaggle[14]. The input contain images containing 32 classes which needs to be segmented. In this case, there is a bit of pre-processing of label data needs to be done as now the output layer outputs 32 different images of 32 different classes. The 32 different outputs obtained from U-net needs to be compared with label data. But since the label data has 3 channels RGB,  3 channels of RGB needs to be converted to 32 channels with each channels representing one class. This is done by one-hot encoding. 
+
+The U-net model was trained to obtain an accuracy of 67.4\% over 14 EPOCHS. The below images shows the segmented results obtained from U-net for training, validation and testing data.
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{multiclassoutput}
+    \caption{Multi class segmented output}
+    \label{fig:Multi class segmented output}
+\end{figure}
+
+
+Thus, U-net performs poorly in the case of multi class semantic segmentation. The following graphs shows the accuracy and loss of the model over number of EPOCHS over time.
+
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=9cm]{acc}
+    \caption{Model loss and accuracy}
+    \label{fig:}
+\end{figure}
 
 
 \section{\textbf{References:}}
@@ -341,6 +406,10 @@ The U-net architecture consists of two path. They are:\\
 \item (PDF) A Deep Feature Learning Method for Drill Bits Monitoring Using the Spectral Analysis of the Acoustic Signals. (n.d.). Retrieved July 03, 2020, from https://www.researchgate.net/publication/327007086 A Deep Feature Learning Method for Drill Bits Monitoring Using the Spectral Analysis of the Acoustic Signals
 
 \item Daniil's blog. (n.d.). Retrieved July 03, 2020, from http://warmspringwinds.github.io/tensorflow/tf-slim/2016/11/22/upsampling-and-image-segmentation-with-tensorflow-and-tf-slim/
+
+\item 2018 Data Science Bowl. (n.d.). Retrieved July 06, 2020, from https://www.kaggle.com/c/data-science-bowl-2018/data
+
+\item Jcoral. (2019, August 25). CamVid. Retrieved July 06, 2020, from https://www.kaggle.com/jcoral02/camvid
 \end{enumerate}
 
 \end{document}
