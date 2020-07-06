@@ -60,7 +60,7 @@ Multiclass sematic segmentation is performed by segmenting 32 classes avilable f
 ### Output
 The folllowing are the ouputs obtained:
 
-![](images/multiclassoutput.JPG
+![](images/multiclassoutput.JPG)
 
 Model Training Loss and Accuracy:
 
