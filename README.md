@@ -54,3 +54,9 @@ The following gifs shows the shows the segmentation of bacteria.
 ![](Output/gif/input.gif)
 ![](Output/gif/output.gif)
 
+## Implementation of multi-class semantic segmentation
+Multiclass sematic segmentation is performed by segmenting 32 classes avilable from Camvid dataset. The dataset can be accessed from [here](https://www.kaggle.com/jcoral02/camvid).
+
+### Output
+The folllowing are the ouputs obtained:
+![](images/multiclassoutput.JPG)
