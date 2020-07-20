@@ -9,6 +9,9 @@
 %\usepackage{authblk}
 \graphicspath{{images/}}
 \usepackage{geometry}
+\usepackage{array}
+\usepackage{color,soul}
+\usepackage{tabularx}
  \geometry{
  a4paper,
  total={170mm,257mm},
@@ -49,12 +52,12 @@ In this section, different layers of a CNN are explained in detail.
 The input to the input layer of the CNN is generally a color image in pixel form which is a three dimensional matrix. The dimensions are length, width and number of channels (R,G,B) of the input image. Generally, the input image is resized to the desired dimensions accepted by the CNN. 
 
 \subsection{\textbf{Convolutional Layer}}
-In the convolutional layer, convolution operation happens between the kernel and the input image. Kernel is a 2D array whose elements are obtained from Gaussian distribution. An example of 3x3 Guassian Kernel is given below[2]:
+In the convolutional layer, convolution operation happens between the kernel and the input image. Kernel is a 2D array whose elements are obtained from Gaussian distribution. An example of 3x3 Gaussian Kernel is given below[2]:
 \begin{figure}[h]
     \centering
     \captionsetup{justification=centering}
     \includegraphics[width=3cm]{Guassian kernel}
-    \caption{3x3 Guassian kernel }
+    \caption{3x3 Gaussian kernel }
     \label{fig:3x3 Guassian kernel}
 \end{figure}
 
@@ -335,7 +338,7 @@ Semantic segmentation was performed in two types of datasets namely:
 \end{enumerate}
 
 \subsection{\textbf{Binary class semantic segmentation results:}}
-The datasets for binary class sematic segmentation were obtained from kaggle[13]. The input contain images of nuclei which needs to be separated from the background. The U-net model was trained to obtain an accuracy of 96.4\% over 13 EPOCHS. The below images shows the segmented results obtained from U-net for training, validation and testing data.
+The datasets for binary class semantic segmentation were obtained from kaggle[13]. The input contain images of nuclei which needs to be separated from the background. The U-net model was trained to obtain an accuracy of 96.4\% over 13 EPOCHS. The below images shows the segmented results obtained from U-net for training, validation and testing data.
 
 \begin{figure}[h]
     \centering
@@ -380,6 +383,46 @@ Thus, U-net performs poorly in the case of multi class semantic segmentation. Th
     \label{fig:}
 \end{figure}
 
+\section{\textbf{Tweaking of Hyper parameters:}}
+In convolutional neural network, the parameters which are declared before the neural net architecture and which can be used to control the learning of the neural networks are called hyper parameters. The hyper parameters used in the u-net architecture are:
+\begin{enumerate}
+\item Batch size
+\item Learning Rate (L.R)
+\item Input image size
+\end{enumerate}
+
+The below table shows the obtained accuracy and loss by tweaking the hyper parameters:
+
+\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
+ \hline
+ \textbf{Sno} & \textbf{Variation} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
+ \hline
+ 0. & Default   & 256 x256    & 8  & 0.001 & 48.5\% & 1.8697 \\
+ \hline
+ 1. & Increased learning rate   & 256 x256    & \textcolor{red}{\textbf{1}}  & \textcolor{red}{\textbf{0.01}} & 48\% & 2.5 \\
+ \hline
+ 2. & Increased learning rate   & 256 x256    & 1  & \textcolor{red}{\textbf{0.05}} & 48.3\% & 2.3 \\
+ \hline
+ 3. & Increased Img size   & \textcolor{red}{\textbf{512 x512}}    & 1  & 0.01 & 48.3\% & 2.4 \\
+ \hline
+ 4. & Increased learning size   & 512 x512    & 1  & \textcolor{red}{\textbf{0.05}} & 48.38\% & 2.2 \\
+ \hline
+ 5. & Decreased Img size   & \textcolor{red}{\textbf{128 x128}}    & 1  & 0.01 & 48.45\% & 1.65 \\
+ \hline
+ 6. & Increased learning size   & 128 x128    & 1  & \textcolor{red}{\textbf{0.05}} & 48.45\% & 1.65 \\
+ \hline
+ 7. & Increased batch size   & 128 x128    & \textcolor{red}{\textbf{8}}  & 0.05 & 48.45\% & 1.65 \\
+ \hline
+ 8. & Increased batch size   & 128 x128    & \textcolor{red}{\textbf{16}}  & 0.05 & 48.45\% & 1.65 \\
+ \hline
+ 9. & Increased batch size   & 128 x128    & \textcolor{red}{\textbf{32}}  & 0.05 & 48.45\% & 1.65 \\
+ \hline
+\end{tabular}
+\newline
+
+It is clearly seen that the accuracy and error of the model does not vary much by tweaking the hyper parameters.Hence, the U-net architecture can provide a maximum IOU accuracy of 48.45\% and a minimum error of 1.65. For all the obtained results, the training took place for two EPOCHS only. After two EPOCHS, the architecture stops learning and accuracy and error remains same.
 
 \section{\textbf{References:}}
 \begin{enumerate}
