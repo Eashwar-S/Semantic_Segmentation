@@ -424,6 +424,51 @@ The below table shows the obtained accuracy and loss by tweaking the hyper param
 
 It is clearly seen that the accuracy and error of the model does not vary much by tweaking the hyper parameters.Hence, the U-net architecture can provide a maximum IOU accuracy of 48.45\% and a minimum error of 1.65. For all the obtained results, the training took place for two EPOCHS only. After two EPOCHS, the architecture stops learning and accuracy and error remains same.
 
+\section{\textbf{Segnet Architecture}}
+Segnet is designed to perform pixel wise segmentation more efficiently. It consists of an encoder network followed by a decoder network and finally a pixel classification layer. The encoder layer consists of 13 convolution layers similar to VGG16 for object classification. Since each encoder layer has a corresponding decoder layer, there are 13 convolution layers present in decoder layer.
+
+Each encoder layer performs convolution operation to detect the features of the input image. Then, these are batch normalized to reduce the amount by which hidden unit values shift. Finally, a rectified linear unit (ReLU) activation is applied pixel wise followed by max pooling operation. Each decoder layer has a upsampling layer to increase the image size by a factor 2 followed by convolution process. The last decoder layer has a softmax activation function which gives output images whose length is the number of segmented labels present. The figure below shows the segnet architecture[15]:
+\newpage
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=10cm]{segnet}
+    \caption{Segnet Architecture}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\section{Results from Segnet Architecture}
+Segnet architecture was trained and tested on bdd-dataset[16] and obtained a mIOU accuracy of 48.45\% and a loss of 2.0201. The results obtained does not differ from U-net due to similarity in architecture.The following are the segmented results obtained by implementing the segnet architecture using tensorflow:
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=10cm]{segres}
+    \caption{Segnet output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=10cm]{segla}
+    \caption{Segnet loss and accuracy}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\section{\textbf{Tweaking Hyperparameters for Segnet}}
+
+\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
+ \hline
+ \textbf{Sno} & \textbf{Variation} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
+ \hline
+ 0. & Default   & 128 x128    & 1  & 0.001 & 48.45\% & 2.0201 \\
+ \hline
+ 1. & Increased learning rate   & 256 x256    & \textcolor{red}{\textbf{1}}  & \textcolor{red}{\textbf{0.01}} & 48\% & 2.5 \\
+ \hline
+\end{tabular}
 \section{\textbf{References:}}
 \begin{enumerate}
 \item Layers of a Convolutional Neural Network. (2020, March 02). Retrieved from https://mc.ai/layers-of-a-convolutional-neural-network/
@@ -453,6 +498,10 @@ It is clearly seen that the accuracy and error of the model does not vary much b
 \item 2018 Data Science Bowl. (n.d.). Retrieved July 06, 2020, from https://www.kaggle.com/c/data-science-bowl-2018/data
 
 \item Jcoral. (2019, August 25). CamVid. Retrieved July 06, 2020, from https://www.kaggle.com/jcoral02/camvid
+
+\item Badrinarayanan, Vijay, et al. “SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation.” ArXiv.org, 10 Oct. 2016, arxiv.org/abs/1511.00561.
+
+\item Profile, bdd-data.berkeley.edu/portal.html.
 \end{enumerate}
 
 \end{document}
