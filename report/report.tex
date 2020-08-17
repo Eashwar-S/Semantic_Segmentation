@@ -300,7 +300,7 @@ The output layer is the final layer of CNN. The output layer takes input from th
     \label{fig:Softmax Activation Function Example}
 \end{figure}
 \newpage
-\section{\textbf{U-net Architecture}}
+\section{\textbf{Segnet Architecture}}
 U-net is popularly used CNN for segmentation. The name U-net comes from the fact that the layers in the CNN are arranged in U shape. The below figure shows the U-net architecture:
 
 \begin{figure}[h]
@@ -456,19 +456,611 @@ Segnet architecture was trained and tested on bdd-dataset[16] and obtained a mIO
     \label{fig:Binary class segmented output}
 \end{figure}
 
-\section{\textbf{Tweaking Hyperparameters for Segnet}}
+\section{\textbf{Results from Running in AWS}}
+
+The following are the results obtained by running U-net model in AWS giving various tweaks to the hyper parameters:
+
+\begin{enumerate}
+    \item \textbf{With Batch size of 16}
+\newline
 
 \begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
  \hline
  \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
  \hline
- \textbf{Sno} & \textbf{Variation} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
+ \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
  \hline
- 0. & Default   & 128 x128    & 1  & 0.001 & 48.45\% & 2.0201 \\
- \hline
- 1. & Increased learning rate   & 256 x256    & \textcolor{red}{\textbf{1}}  & \textcolor{red}{\textbf{0.01}} & 48\% & 2.5 \\
+ 1. & 41   & 256 x256    & 16  & 0.01 & 48.45\% & 2.8794 \\
  \hline
 \end{tabular}
+
+\newpage
+\textbf{U-net segmented Output}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{U-net-B16-S256-im.JPG}
+    \caption{U-net segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\textbf{U-net MIOU accuracy and Loss}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{U-net-B16-S256-gr.JPG}
+    \caption{U-net segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\item \textbf{With increased batch size of 32:}
+\newline
+\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
+ \hline
+ \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
+ \hline
+ 1. & 41   & 256 x256    & 32  & 0.01 & 48.46\% & 2.8746 \\
+ \hline
+\end{tabular}
+\newline
+
+\textbf{U-net segmented Output}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{U-net-B32-S256-im.JPG}
+    \caption{U-net segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\textbf{U-net MIOU accuracy and Loss}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{U-net-B32-S256-gr.JPG}
+    \caption{U-net segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+
+\item \textbf{With increased image size of 512 and batch size of 8:}
+\newline
+\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
+ \hline
+ \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
+ \hline
+ 1. & 41   & 512 x512   & 8  & 0.01 & 48.41\% & 2.1745 \\
+ \hline
+\end{tabular}
+
+\newpage
+
+\textbf{U-net segmented Output}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{U-net-B8-S512-im.JPG}
+    \caption{U-net segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+
+\textbf{U-net MIOU accuracy and Loss}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{U-net-B8-S512-gr.JPG}
+    \caption{U-net segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\item \textbf{With 20 classes:}
+\newline
+\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
+ \hline
+ \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
+ \hline
+ 1. & 20   & 256 x256   & 16  & 0.01 & 31.78\% & 1.7894 \\
+ \hline
+\end{tabular}
+
+
+\textbf{U-net segmented Output}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{U-net-B16-S256-C20-im.JPG}
+    \caption{U-net segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+
+\textbf{U-net MIOU accuracy and Loss}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{U-net-B16-S256-C20-gr.JPG}
+    \caption{U-net segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\newpage
+
+\item \textbf{With 20 classes and batch size 32:}
+\newline
+\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
+ \hline
+ \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
+ \hline
+ 1. & 20   & 256 x256   & 32  & 0.01 & 31.73\% & 2.1943 \\
+ \hline
+\end{tabular}
+
+
+\textbf{U-net segmented Output}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{U-net-B32-S256-C20-im.JPG}
+    \caption{U-net segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+
+\textbf{U-net MIOU accuracy and Loss}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{U-net-B32-S256-C20-gr.JPG}
+    \caption{U-net segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\item \textbf{With 20 classes and image size 512:}
+\newline
+\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
+ \hline
+ \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
+ \hline
+ 1. & 20   & 512 x512   & 8  & 0.01 & 31.70\% & 2.01393 \\
+ \hline
+\end{tabular}
+
+
+\textbf{U-net segmented Output}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{U-net-B8-S512-C20-im.JPG}
+    \caption{U-net segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+
+\textbf{U-net MIOU accuracy and Loss}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{U-net-B32-S256-C20-gr.JPG}
+    \caption{U-net segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+
+\end{enumerate}
+
+
+The following are the results obtained by running Segnet model in AWS giving various tweaks to the hyper parameters:
+
+\begin{enumerate}
+    \item \textbf{With Batch size of 16}
+\newline
+
+\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
+ \hline
+ \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
+ \hline
+ 1. & 41   & 256 x256    & 16  & 0.01 & 48.45\% & 2.3080 \\
+ \hline
+\end{tabular}
+
+\textbf{Segnet segmented Output}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{Segnet-B16-S256-im.JPG}
+    \caption{Segnet segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\textbf{Segnet MIOU accuracy and Loss}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{Segnet-B16-S256-gr.JPG}
+    \caption{Segnet segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\item \textbf{With increased batch size of 32:}
+\newline
+\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
+ \hline
+ \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
+ \hline
+ 1. & 41   & 256 x256    & 32  & 0.01 & 48.45\% & 3.1875 \\
+ \hline
+\end{tabular}
+\newline
+
+\textbf{Segnet segmented Output}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{Segnet-B32-S256-im.JPG}
+    \caption{Segnet segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\textbf{Segnet MIOU accuracy and Loss}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{Segnet-B32-S256-gr.JPG}
+    \caption{Segnet segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+
+\item \textbf{With increased image size of 512 and batch size of 8:}
+\newline
+\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
+ \hline
+ \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
+ \hline
+ 1. & 41   & 512 x512   & 8  & 0.01 & 48.42\% & 2.3623 \\
+ \hline
+\end{tabular}
+
+\textbf{Segnet segmented Output}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{Segnet-B8-S512-im.JPG}
+    \caption{Segnet segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+
+\textbf{Segnet MIOU accuracy and Loss}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{Segnet-B8-S512-gr.JPG}
+    \caption{Segnet segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\item \textbf{With 20 classes:}
+\newline
+\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
+ \hline
+ \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
+ \hline
+ 1. & 20   & 256 x256   & 16  & 0.01 & 31.74\% & 1.7805 \\
+ \hline
+\end{tabular}
+
+
+\textbf{Segnet segmented Output}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{Segnet-B16-S256-C20-im.JPG}
+    \caption{Segnet segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+
+\textbf{Segnet MIOU accuracy and Loss}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{Segnet-B16-S256-C20-gr.JPG}
+    \caption{Segnet segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\newpage
+
+\item \textbf{With 20 classes and batch size 32:}
+\newline
+\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
+ \hline
+ \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
+ \hline
+ 1. & 20   & 256 x256   & 32  & 0.01 & 31.73\% & 1.8175 \\
+ \hline
+\end{tabular}
+
+
+\textbf{Segnet segmented Output}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{Segnet-B32-S256-C20-im.JPG}
+    \caption{Segnet segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+
+\textbf{Segnet MIOU accuracy and Loss}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{Segnet-B32-S256-C20-gr.JPG}
+    \caption{Segnet segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\item \textbf{With 20 classes and image size 512:}
+\newline
+\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
+ \hline
+ \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
+ \hline
+ 1. & 20   & 512 x512   & 8  & 0.01 & 31.70\% & 1.7675 \\
+ \hline
+\end{tabular}
+
+
+\textbf{Segnet segmented Output}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{Segnet-B8-S512-C20-im.JPG}
+    \caption{Segnet segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+
+\textbf{Segnet MIOU accuracy and Loss}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8cm]{Segnet-B32-S256-C20-gr.JPG}
+    \caption{Segnet segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+
+\end{enumerate}
+
+\section{\textbf{Cityscrapes Dataset}}
+Semantic segmentation was performed on Cityscrapes dataset which consisted of 5000 images and labels. 2975 images were used for training, 500 for validation and remaining 1525 images were used for testing. The following are the results obtained by testing different architectures on the dataset. The training took a total of 22 EPOCHS.
+
+\subsection{\textbf{U-net}} U-net architecture gave a maximum Mean IOU accuracy of 53.29\%. The following images shows the outputs obtained:
+
+\textbf{With 29 classes and batch size 16:}
+\newline
+
+\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
+ \hline
+ \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
+ \hline
+ 1. & 29   & 256 x256   & 16  & 0.01 & 53.29\% & 0.3350 \\
+ \hline
+\end{tabular}
+
+\textbf{U-net segmented Output}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8.5cm]{U-net-cityscrapes-B16-im.JPG}
+    \caption{U-net segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+
+\textbf{U-net MIOU accuracy and Loss}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8.5cm]{U-net-cityscrapes-B16-gr.JPG}
+    \caption{U-net Precision vs Recall Graph}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\textbf{U-net Precision vs Recall Graph}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8.5cm]{U-net-cityscrapes-B16-p-vs-re.JPG}
+    \caption{U-net segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\newpage
+The following are the IOU accuracy of each class:
+
+\textbf{U-net IOU accuracy per class}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=9cm]{U-net-cityscrapes-B16-IOU-C29.JPG}
+    \caption{U-net IOU accuracy per class}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\subsection{\textbf{Segnet}} Segnet architecture gave a maximum Mean IOU accuracy of 47.37\%. The following images shows the outputs obtained:
+
+\textbf{With 29 classes and batch size 16:}
+\newline
+
+\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
+ \hline
+ \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
+ \hline
+ 1. & 29   & 256 x256   & 16  & 0.01 & 47.37\% & 0.4943 \\
+ \hline
+\end{tabular}
+\textbf{Segnet segmented Output}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8.5cm]{Segnet-cityscrapes-B16-im.JPG}
+    \caption{Segnet segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\newpage
+\textbf{Segnet MIOU accuracy and Loss}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8.5cm]{Segnet-cityscrapes-B16-gr.JPG}
+    \caption{Segnet Precision vs Recall Graph}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\textbf{Segnet Precision vs Recall Graph}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8.5cm]{Segnet-cityscrapes-B16-p-vs-re.JPG}
+    \caption{Segnet segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+The following are the IOU accuracy of each class:
+
+\textbf{Segnet IOU accuracy per class}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=9cm]{Segnet-cityscrapes-B16-IOU-C29.JPG}
+    \caption{Segnet IOU accuracy per class}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+
+\subsection{\textbf{ICnet}} ICnet architecture gave a maximum Mean IOU accuracy of 48.39\%. The following images shows the outputs obtained:
+
+\textbf{With 29 classes and batch size 16:}
+\newline
+
+\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
+ \hline
+ \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
+ \hline
+ \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
+ \hline
+ 1. & 29   & 256 x256   & 16  & 0.01 & 48.39\% & 0.4134 \\
+ \hline
+\end{tabular}
+
+\textbf{ICnet segmented Output}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8.5cm]{icnet-cityscrapes-B16-im.JPG}
+    \caption{ICnet segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+
+\textbf{ICnet MIOU accuracy and Loss}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8.5cm]{ICnet-cityscrapes-B16-gr.JPG}
+    \caption{ICnet Precision vs Recall Graph}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\textbf{ICnet Precision vs Recall Graph}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8.5cm]{ICnet-cityscrapes-B16-p-vs-re.JPG}
+    \caption{ICnet segmented output}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\newpage
+The following are the IOU accuracy of each class:
+
+\textbf{ICnet IOU accuracy per class}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=9cm]{ICnet-cityscrapes-B16-IOU-C29.JPG}
+    \caption{ICnet IOU accuracy per class}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
 \section{\textbf{References:}}
 \begin{enumerate}
 \item Layers of a Convolutional Neural Network. (2020, March 02). Retrieved from https://mc.ai/layers-of-a-convolutional-neural-network/
