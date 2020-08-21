@@ -53,7 +53,17 @@ Please follow the below steps to run the code:
 ## Results obtained:
 The following are the segmented results obtained from U-net, IC-net, Segnet and Resnet architectures respectively for the same input image:
 
-![](images/seg.JPG)
+#### U-net Segmented Output:
+![](images/unet1.JPG)
+
+#### Segnet Segmented Output:
+![](images/segnet1.JPG)
+
+#### IC-net Segmented Output:
+![](images/icnet1.JPG)
+
+#### Resnet Segmented Output:
+![](images/resnet.JPG)
 
 #### U-net mIOU accuracy and loss graph:
 
