@@ -1,153 +1,77 @@
 # Semantic_Segmentation
 
-In this project, semantic segmentation is done using U-net. U-net is popularly used convolutional neural net for semantic segmentaation.
+In this project, architectures like U-net, Segnet, IC-net and Resnet are implemented for the purpose of semantic segmenatation.
 
 ## Dataset used for Training and Testing:
-The dataset was obtained from Kaggle.com. The datasets used can be downloaded from this [link](https://www.kaggle.com/c/data-science-bowl-2018/data).
+The architectures were trained on Cityscrapes dataset.
+The datasets used can be downloaded from this [link](https://www.cityscapes-dataset.com/downloads/). Please download gtFine_trainvaltest.zip (241MB) [md5] for labels and leftImg8bit_trainvaltest.zip (11GB) [md5] for images.
 
-## U-net:
-The following is the architecture of U-net used to perform Semantic Segmentation.
-![](images/u-net.JPG)
+## Software Requirements:
+1. Python version - 3.8
+2. Tensorflow 2.2.0
+3. Jupyter notebook
 
-## Directory Structure:
-After downloading and extracting the dataset and all the follders inside it, change the name of the folder from "data-science-bowl-2018" to "dataset". The final directory structure should look like:
-```
-Semantic_Segmentation:
-    |
-    |-----> Unet.ipnb
-    |
-    |-----> dataset
-    |          |
-    |          |----> stage1_test
-    |          |----> stage1_train
-    |
-    |
-    |------> NPY files
-    |------> LICENSE
-    |------> images
-    |------> Output
-    |------> README.md
-    |------> logs
-```
+## Hardware Requirements:
+The architectures were trained with AWS support and making using S3 bucket cloud storage to store the dataset and Sagemaker service to launch the jupyter notebook with high performance GPU. The details of the GPU used is given below:
 
-## Model training and accuracy:
-U-net model was implemeted using tensorflow. The model accuracy and model loss was analysed using tensor board and following are the graphs:
+1. GPU name : Tesla 1xK80
+2. Instance type: ml.p2.x.large
+3. number of vCPUs : 4
+4. RAM : 61 GB
+5. GPU Memory : 12 GB
 
-Accuracy increase with increase in number of EPOCHS.
-![](images/epoch_accuracy.JPG)
+## Running the code:
+In order to run the code, first AWS account should be set up. Then, the user needs to request for ml.p2.x.large instance as AWS does not provide GPU by default for its user. A mail stating the usage and requirement for the GPU need to be sent to AWS service team and within 48 hours, 1 ml.p2.x.large instance will be granted to the user.
 
-Loss decreases with increase in number of EPOCHS.
-![](images/epoch_loss.JPG)
+### Running Jupyter notebook on Sagemaker:
+Please follow the below steps to run the code:
 
-The tensor board outputs can be viewed by clicking this [link](http://localhost:8099/#scalars&runSelectionState=eyJ0cmFpbiI6dHJ1ZSwidmFsaWRhdGlvbiI6dHJ1ZX0%3D)
-## Output Images:
-The following are few output images obtained from U-net model after training. The left side shows the input image with bacteria. The right side shows the segmented output obtained from U-net highlighting the bacteria.
+1. Login into your AWS console using this [link](https://signin.aws.amazon.com/signin?redirect_uri=https%3A%2F%2Fconsole.aws.amazon.com%2Fconsole%2Fhome%3Fnc2%3Dh_ct%26region%3Dus-east-1%26src%3Dheader-signin%26state%3DhashArgs%2523%26isauthcode%3Dtrue&client_id=arn%3Aaws%3Aiam%3A%3A015428540659%3Auser%2Fhomepage&forceMobileApp=0&code_challenge=gCL-BkIH980B_IBYQ56P7P9oErtYzzUER4s0aNvf4tM&code_challenge_method=SHA-256)
 
-![](Output/inputTestImages/input1.jpg)
-![](Output/outputImages/output1.jpg)
+2. Search for AWS Sagemaker in Find Services.
 
-![](Output/inputTestImages/input2.jpg)
-![](Output/outputImages/output2.jpg)
+3. On the left side, click on Notebook Instances.
 
-The following gifs shows the shows the segmentation of bacteria.  
+4. Click on 'Create notebook instance' button on the right side.
 
-![](Output/gif/input.gif)
-![](Output/gif/output.gif)
+5. Give a name to the notebook instance and in Additional configuration increase the volume size to 50 GB.
 
-## Implementation of multi-class semantic segmentation
-Multiclass sematic segmentation is performed by segmenting 32 classes avilable from Camvid dataset. The dataset can be accessed from [here](https://www.kaggle.com/jcoral02/camvid).
+6. Change the notebook instance type to ml.p2.x.large instance.
 
-### Output
-The folllowing are the ouputs obtained:
+7. In the github repositories option, choose the option 'Clone a public Git repository to this notebook instance only'.
 
-![](images/multiclassoutput.JPG)
+8. On the Git reposity URL paste the following URL:https://github.com/Eashwar-S/Semantic_Segmentation.git
 
-Model Training Loss and Accuracy:
+9. Click 'create notebook instance' button.
 
-![](images/acc.JPG)
+10. If you face an error mentioning 'limit' then probably GPU instance has been allocated for your account. Please request AWS service to grant ml.p2.x.large instance.
 
+11. Lanuching of instance will take 1-2 minutes. 
 
-### Installing Anaconda
-1. To install anaconda please click [here](https://www.anaconda.com/products/individual)
+12. After the notebook instance is launched, click on Open Jupyter notebook and it will launch a jupyter notebook on a separate tab which will contain all the files cloned from this repository.
 
-2. Scoll down and go to "Anaconda Installers" and choose the approriate installation according to the computer specifications.
+## Results obtained:
+The following are the segmented results obtained from U-net, IC-net, Segnet and Resnet architectures respectively for the same input image:
 
-3. During Installations, there is no need to change anything just click next and finish.
+![](images/seg.JPG)
 
-### Installing libraries
+#### U-net mIOU accuracy and loss graph:
 
-1. On window apps, search for "Anaconda Navigator" and open it.
+![](images/U-net-cityscrapes-B16-gr.JPG)
 
-2. On the left side, go to Environments.
+#### Segnet mIOU accuracy and loss graph:
 
-3. By default, on search environments we will find the environment as base(root). We need to create a new environment.
+![](images/Segnet-cityscrapes-B16-gr.JPG)
 
-3. On the bottom left, please click Create which creates a new environment. Name it as "tensorflow".
+#### IC-net mIOU accuracy and loss graph:
 
-4. A new "tensorflow" environment will be added below base(root).
+![](images/ICnet-cityscrapes-B16-gr.JPG)
 
-5. Select "tensorflow" environment and on the right side we find all the packages installed on the environment.
+#### Resnet mIOU accuracy and loss graph:
 
-6. Change the option to show All from only installed packages.
+![](images/Resnet-cityscrapes-B16-gr.JPG)
 
-7. Now click 'Update index' once.
+### Architecture Comparison:
+Of all the architectures, U-net performed the best with mIOU accuracy of 53.29%.
 
-8. Search for tensorflow in search packages.
-
-if your computer has a gpu, please select 'tensorflow-gpu' or else just 'tensorflow' and click Apply.
-
-Tensorflow package will be installed in 'tensorflow' environment.
-
-9. Similarly search for the following packages in search packages and click Apply.
-
-a. opencv
-b. tqdm
-c. numpy
-d. matplotlib
-e. xlrd
-f. pillow
-g. scikit-image
-
-### Installing Jupyter Notebook
-
-1. After installing all packages, please go to Home in Anaconda Navigator from Environments.
-
-2. Find Jupyter Notebook and cick install
-
-3. After installation close the Anaconda navigator
-
-### Cloning the repository
-Please execute the following commands on the command prompt.
-```
-cd 'to desired directory'
-git clone https://github.com/Eashwar-S/Semantic_Segmentation
-
-```
-### Dowloading datasets
-
-1. After cloning the repository create a folder inside the repository called 'dataset'.
-
-2. Download the dataset zip file from this [link](https://drive.google.com/drive/folders/19RD0j9CyTw3lixXQlFpOmm-iFg1ruE8Y?usp=sharing).
-
-3. Extract the file. The final structure should look like this.
-```
-dataset
-    |
-    |---> bdd100k_seg
-            |
-            |-----> color_labels
-            |-----> images
-            |-----> labels.py
-```
-
-### Opening on jupyter notebook
-1. Open 'Anaconda Prompt' from windows app. Execute the following command.
-```
-activate tensorflow
-```
-
-2. Navigate to the directory where the repository is cloned the repository.
-```
-cd Semantic_Segmentation
-jupyter notebook
-```
+![](images/arch.JPG)
