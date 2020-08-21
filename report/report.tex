@@ -33,7 +33,7 @@ eashwar@umd.edu \hspace{2in} scharifa@umd.edu
 \begin{document}
 \maketitle
 \begin{abstract}
-Human beings are easily able to identify and differentiate objects based of their cognitive skills. Cognitive skills like category formation, pattern recognition, working memory etc helps to segment and process visual information obtained through eyes. A machine process images in the form of matrix containing whole numbers which are known as pixels. Each pixel indicates the brightness levels at that particular location. As the machine does not posses cognitive capability to segment images, a convolution neural net is designed and built through which the machine learns to segment images. The segmentation performed is called semantic segmentation as it groups every pixel of the image into classes based on labels. The report explains in detail Convolution Neural Net architecture and how it can be used for semantic segmentation.
+Human beings are easily able to identify and differentiate objects based on their cognitive skills. Cognitive skills like category formation, pattern recognition, working memory etc help humans to segment and process visual information obtained through eyes. But, a machine process visual data differently in the form of matrix containing whole numbers known as pixels. Each pixel indicates the brightness levels at that particular location. As the machine does not posses cognitive capability to segment images, a convolution neural net is designed and built through which the machine learns to segment images. The segmentation performed is called semantic segmentation as it groups every pixel of the image into classes based on labels. The report describes and implements convolutional neural networks like U-net, Segnet, IC-net and Resnet34, compare the results obtained and recommends the best architecture for semantic segmentation.
 \end{abstract}
 
 \section{\textbf{Introduction}}
@@ -49,10 +49,10 @@ Over the years convolution neural net (CNN) has increased its horizon and made s
 \section{Definitions}
 In this section, different layers of a CNN are explained in detail.
 \subsection{\textbf{Input Layer}}
-The input to the input layer of the CNN is generally a color image in pixel form which is a three dimensional matrix. The dimensions are length, width and number of channels (R,G,B) of the input image. Generally, the input image is resized to the desired dimensions accepted by the CNN. 
+The input to the input layer of the CNN is generally a color image represented in three dimensional arrays containing pixels in range 0-255. The three dimensions are length, width and number of channels (R,G,B) of the input image. Generally, the input image is resized to the desired dimensions accepted by the CNN. 
 
 \subsection{\textbf{Convolutional Layer}}
-In the convolutional layer, convolution operation happens between the kernel and the input image. Kernel is a 2D array whose elements are obtained from Gaussian distribution. An example of 3x3 Gaussian Kernel is given below[2]:
+In the convolutional layer, convolution operation happens between the kernel and the input image. Kernel is a 2D array whose elements are normally distributed. An example of 3x3 Gaussian Kernel is given below[2]:
 \begin{figure}[h]
     \centering
     \captionsetup{justification=centering}
@@ -75,7 +75,7 @@ In convolution layer, the convolution operation is performed on all the pixels b
     \label{fig:3x3 Guassian kernel}
 \end{figure}
 
-Typically, in most neural networks the dimensions of the image after performing convolution are maintained same. In order to do that it is important to understand how convolution operation affects the dimensions of the image. The relation is given as follows:
+Typically, in most neural networks the dimensions of the image after performing convolution are maintained same with the help of padding. But, it is important to understand how convolution operation affects the dimensions of the image. The relation is given as follows:
 \begin{equation*}
 	\boldsymbol{Output Width = \frac{I_W - K_W + 2*P}{S} + 1}
 \end{equation*}
@@ -89,16 +89,18 @@ S = stride = number of pixels shift over the input image
 	\boldsymbol{Output Height = \frac{I_H - K_H + 2*P}{S} + 1}
 \end{equation*}
 \begin{center}
-where  $I_W$ is the image width \\
-$K_W$ is the kernel width	\\	
+where  $I_H$ is the image height \\
+$K_H$ is the kernel height	\\	
 P is number of padding bits
 \end{center}
 
 \subsection{\textbf{Pooling Layers:}}
-Pooling layers in a CNN is added after the convolutional layer. It reduces the size of the image by retaining only the important features in the image and neglecting the rest. Pooling layers have the following advantages:
+Pooling layers in a CNN are typically connected after convolutional layers. It reduces the size of the image by retaining only the important features in the image and neglecting the rest. Pooling layers have the following advantages:
 \begin{enumerate}
 \item It reduces the number of parameters to train in a CNN.
-\item It prevents the neural net from over-fitting problem. Over fitting is a situation where the neural net models the training data very well but fails to generalize the results on the testing data. This usually occurs due large number of parameters which lets the neural net detect all the patterns in an image but fails to learn from the patterns to generalize on the testing image. This can be observed when the neural net give more than 95\% accuracy in training data but gives less than 50\% accuracy in testing data.
+
+\item It prevents the neural net from the over-fitting problem. Over fitting is a situation where the neural net obtains high accuracy over training data and less accuracy over the testing data. This usually occurs because of large number of trainable parameters which lets the neural net detect all the patterns in an training image present but fails to learn from the patterns to generalize it on the testing image. This can be observed when the neural net obtains more than 95\% accuracy on the training data but less than 50\% accuracy on the testing data.
+\newline
 
 \textbf{Commonly used Pooling Layers:} Average pooling and max pooling are the two most commonly used pooling layers in neural network.
 \begin{enumerate}
@@ -143,7 +145,7 @@ This process is repeated over the entire feature map to obtain the reduced 2x2 f
     \label{fig:Max Pooling Example}
 \end{figure}
 
-As this is the same example used in average pooling, the output feature map size is 2x2. The following i s the max pooling output for the first (violet) patch of the feature map:
+As this is the same example used in average pooling, the output feature map size is 2x2. The following is the max pooling output for the first (violet) patch of the feature map:
 \begin{equation*}
 Output value = max(4,9,5,6) = 9.
 \end{equation*}
@@ -151,7 +153,7 @@ Output value = max(4,9,5,6) = 9.
 \end{enumerate}
 
 \subsection{\textbf{Unpooling Layers:}}
-In CNN, inverse operation of pooling layers is not possible. But unpooling layers obtains the approximate inverse of pooling layers by storing the maximum value from each patch of the feature map in a set of switch variables during the pooling operation is being performed. These switch variables  are again in unpooling layers to reconstruct the layer above into appropriate locations. The below picture shows unpooling:
+In CNN, inverse operation of pooling is not possible. But unpooling layer obtains the approximate inverse of pooling operation by storing the index of the maximum value from each patch of the feature map in a set of switch variables while pooling operation is being performed. These switch variables  are again used in unpooling layers to reconstruct the layer before the pooling operation was performed. The below picture shows unpooling:
 
 \begin{figure}[h]
     \centering
@@ -163,7 +165,7 @@ In CNN, inverse operation of pooling layers is not possible. But unpooling layer
   
 
 \subsection{\textbf{Activation Functions:}}
-As the name suggests, an activation function decides whether to activate a neuron or not based on calculating weighted sum and adding bias with it. In the case of a CNN, weighted sum is the output image obtained by convolving the kernel over the input image. Bias is a fixed value which is added pixel wise to the obtained output image. Activation function is applied to this output image which decides whether to select a particular pixel value and pass on to the next layer or not. 
+As the name suggests, an activation function decides whether to activate a neuron or not based on calculations of weighted sum and bias. In the case of a CNN, weighted sum is the output image obtained by convolving the kernel over the input image. Bias is a fixed value added pixel wise to the obtained output image. Activation function is applied to this output image which decides whether to select a particular pixel value and pass on to the next layer or not. 
 \newline
 \textbf{Need for Activation Functions:} In neural networks, the weights (kernel in the case of CNN) and bias values constantly gets updated based on the error at the output. The values are updated using back-propagation algorithm. Activation functions makes the back propagation possible as the gradients are supplied along with errors to update the weight and bias values[5].
 \newline
@@ -202,11 +204,12 @@ The following conditional equations defines linear function:
 \end{equation*}
 Linear function eliminates the multiple classification problem faced by employing step function as the activation function. As the activation function varies with input values, it can take many values not only 0 and 1. Hence, it can classify multiple classes.
 
-The main disadvantage of linear function is the derivative becomes constant. This means that the gradient no longer varies with input. Hence,  if there was an error in detecting the output, since the gradient is constant there will be constant change in the weights and bias values irrespective of inputs. This means that the neural net fails to learn.
+The main disadvantage of linear function is the derivative becomes constant. This means that the gradient no longer varies with input. Hence,  if there was an error in detecting the output, since the gradient is constant there will be constant change in the weights and bias values irrespective of inputs. This means that the neural net will fail to learn.
 
-Another disadvantage occurs due to linearity property. By, employing linear functions as activation functions to all hidden layers, the output will be a linear combination of hidden layers. Hence, multiple hidden layers can be combined into 1 hidden layer. Hence,  by employing linear function only 1-hidden layer neural nets are possible.
+Another disadvantage occurs due to linearity property. By, employing linear functions as activation functions to all hidden layers, the output will be a linear combination of hidden layers. Hence, multiple hidden layers can be combined into 1 hidden layer. Hence,  by employing linear function, 1-hidden layer neural nets are possible.
 \newline
 \item \textbf{Sigmoid Function:} The below picture shows the sigmoid function.[7]
+\newpage
 
 \begin{figure}[h]
     \centering
@@ -220,7 +223,7 @@ The following conditional equations defines sigmoid function:
 \text{Activation Function  } A = \frac{1}{1 + e^{-x}}
 \end{equation*}
 
-The sigmoid function is essentially a smoothened version of step function. This makes it far more useful than step function. Firstly, sigmoid function is non-linear which eliminates the linearity problem. Secondly, it can take many values between 0 and 1 which makes it useful in multiple classification problems.
+The sigmoid function is essentially a smoothened version of step function. This makes it far more useful than step function. Firstly, sigmoid function is non-linear which eliminates the linearity problem. Secondly, it can take many values between 0 and 1 which makes it usable in multi class classification problems.
 
 The only disadvantage of sigmoid function is that gradient of the points farther from origin approaches to zero which gives rise to vanishing gradients problem. This makes the neural net to learn very slowly and in worst case scenarios not learn at all.
 
@@ -241,6 +244,8 @@ The following conditional equations defines tanh function:
 Tanh function is a scaled version of sigmoid function. The gradient of the points farther from origin approaches slowly to zero than sigmoid function. But, tanh function also faces the problem of vanishing gradient.
 
 \item \textbf{Relu:} Relu stands for Rectified linear unit. It is one of the most commonly used activation function. The figure below shows the function:[7]
+\newpage
+
 \begin{figure}[h]
     \centering
     \captionsetup{justification=centering}
@@ -249,7 +254,7 @@ Tanh function is a scaled version of sigmoid function. The gradient of the point
     \label{fig: Relu Function}
 \end{figure}
 
-Relu is non-linear in nature as it remains zero for all the negative values for the function which allows neural net to have multiple layers. In addition to this, most of the neurons in the neural net never fire up due to the characteristics of Relu function. This makes the neural net lighter. This makes Relu function less computationally expensive than Sigmoid and Tanh functions.
+Relu is non-linear in nature as it remains zero for all the negative values which allows neural net to have multiple layers. In addition to this, most of the neurons in the neural net never fire up due to the characteristics of Relu function. This makes the neural net lighter. This makes Relu function less computationally expensive than Sigmoid and Tanh functions.
 
 The disadvantage of Relu function is that for negative values the gradient remains remains zero. This means that some neurons in the neural net will not respond to the change in the output. This is called dying Relu problem.
 \end{enumerate} 
@@ -290,7 +295,7 @@ Then the kernel is made to slide over the padded representation to get 4x4 outpu
 
 
 \subsection{\textbf{Output Layer:}}
-The output layer is the final layer of CNN. The output layer takes input from the fully connected layer and assigns probability to it. The assignment of probability is done through softmax activation function. Hence, the output layer outputs the probability of the probability of each class in the input image. The below image shows the softmax activation function present in output layer.[10]
+The output layer is the final layer of CNN. The output layer takes input from the fully connected layer and assigns probability to it. The assignment of probability is done through softmax activation function. Hence, the output layer outputs the probability of each class in the input image. The below image shows the softmax activation function present in output layer.[10]
 
 \begin{figure}[h]
     \centering
@@ -300,766 +305,265 @@ The output layer is the final layer of CNN. The output layer takes input from th
     \label{fig:Softmax Activation Function Example}
 \end{figure}
 \newpage
-\section{\textbf{Segnet Architecture}}
-U-net is popularly used CNN for segmentation. The name U-net comes from the fact that the layers in the CNN are arranged in U shape. The below figure shows the U-net architecture:
+\section{\textbf{U-net Architecture}}
+U-net is popularly used CNN for segmentation. The name U-net comes from the fact that the layers in the CNN are arranged in U shape. The below figure shows the U-net architecture[17]:
 
 \begin{figure}[h]
     \centering
     \captionsetup{justification=centering}
-    \includegraphics[width=9cm]{u-net}
+    \includegraphics[width=10cm]{u-net}
     \caption{U-net Architecture}
     \label{fig:U-net Architecture}
 \end{figure}
 
 The U-net architecture consists of two path. They are:\\
-1. Contraction Path: The left half of the U-net where the layers are represented from top to bottom is called contraction path. The contraction path consists of an input layer, sequence of convolution layers, Relu activation layers and max pooling layers. These series of layers reduce the size of the input image simultaneously increasing the number of channels.
+
+1. \textbf{Contraction Path}: The left half of the U-net where the layers are represented from top to bottom is called contraction path. The contraction path consists of an input layer, sequence of convolution layers, Relu activation layers and max pooling layers. These series of layers reduce the size of the input image simultaneously increasing the number of channels.
 
 
-2. Expansion Path: The right half of the U-net where the layers are represented from bottom to top is called expansion path. The expansion path consists of sequence of deconvolution or up-convolution layers and concatenation with high resolution features from the contraction path and unpooling layers. The expansion path gives output data in the same size as the input image data. The expansion path increase the size of the contraction path output data simultaneously decreasing the number of channels.
-
-\section{\textbf{Implementation:}}
-\begin{enumerate}
-\item Language Used: Python 3.8
-
-\item Packages Used: Tensorflow, Numpy, cv2
-
-\item Software Used: Jupyter Notebook
-
-\item Github Link: \url{https://github.com/Eashwar-S/Semantic_Segmentation}
-
-\end{enumerate}
-
-\section{\textbf{Results}}
-Semantic segmentation was performed in two types of datasets namely:
-\begin{enumerate}
-\item Binary class Semantic segmentation: In this the input images contain only two classes and semantic segmentation is performed to separate these two classes.
-
-\item Multi class semantic segmentation: In this the input images contains 32 classes and semantic segmentation is performed to separate 32 classes with different colors.
-\end{enumerate}
-
-\subsection{\textbf{Binary class semantic segmentation results:}}
-The datasets for binary class semantic segmentation were obtained from kaggle[13]. The input contain images of nuclei which needs to be separated from the background. The U-net model was trained to obtain an accuracy of 96.4\% over 13 EPOCHS. The below images shows the segmented results obtained from U-net for training, validation and testing data.
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{binaryclassoutput}
-    \caption{Binary class segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-Thus, U-net performs brilliantly in the case of binary class semantic segmentation. The following graphs shows the accuracy and loss of the model over number of EPOCHS over time.
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=9cm]{accu1}
-    \caption{Model loss and accuracy}
-    \label{fig:}
-\end{figure}
-
-\subsection{\textbf{Multi class semantic segmentation results:}}
-The datasets for binary class semantic segmentation were obtained from kaggle[14]. The input contain images containing 32 classes which needs to be segmented. In this case, there is a bit of pre-processing of label data needs to be done as now the output layer outputs 32 different images of 32 different classes. The 32 different outputs obtained from U-net needs to be compared with label data. But since the label data has 3 channels RGB,  3 channels of RGB needs to be converted to 32 channels with each channels representing one class. This is done by one-hot encoding. 
-
-The U-net model was trained to obtain an accuracy of 67.4\% over 14 EPOCHS. The below images shows the segmented results obtained from U-net for training, validation and testing data.
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{multiclassoutput}
-    \caption{Multi class segmented output}
-    \label{fig:Multi class segmented output}
-\end{figure}
-
-
-Thus, U-net performs poorly in the case of multi class semantic segmentation. The following graphs shows the accuracy and loss of the model over number of EPOCHS over time.
-
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=9cm]{acc}
-    \caption{Model loss and accuracy}
-    \label{fig:}
-\end{figure}
-
-\section{\textbf{Tweaking of Hyper parameters:}}
-In convolutional neural network, the parameters which are declared before the neural net architecture and which can be used to control the learning of the neural networks are called hyper parameters. The hyper parameters used in the u-net architecture are:
-\begin{enumerate}
-\item Batch size
-\item Learning Rate (L.R)
-\item Input image size
-\end{enumerate}
-
-The below table shows the obtained accuracy and loss by tweaking the hyper parameters:
-
-\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
- \hline
- \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
- \hline
- \textbf{Sno} & \textbf{Variation} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
- \hline
- 0. & Default   & 256 x256    & 8  & 0.001 & 48.5\% & 1.8697 \\
- \hline
- 1. & Increased learning rate   & 256 x256    & \textcolor{red}{\textbf{1}}  & \textcolor{red}{\textbf{0.01}} & 48\% & 2.5 \\
- \hline
- 2. & Increased learning rate   & 256 x256    & 1  & \textcolor{red}{\textbf{0.05}} & 48.3\% & 2.3 \\
- \hline
- 3. & Increased Img size   & \textcolor{red}{\textbf{512 x512}}    & 1  & 0.01 & 48.3\% & 2.4 \\
- \hline
- 4. & Increased learning size   & 512 x512    & 1  & \textcolor{red}{\textbf{0.05}} & 48.38\% & 2.2 \\
- \hline
- 5. & Decreased Img size   & \textcolor{red}{\textbf{128 x128}}    & 1  & 0.01 & 48.45\% & 1.65 \\
- \hline
- 6. & Increased learning size   & 128 x128    & 1  & \textcolor{red}{\textbf{0.05}} & 48.45\% & 1.65 \\
- \hline
- 7. & Increased batch size   & 128 x128    & \textcolor{red}{\textbf{8}}  & 0.05 & 48.45\% & 1.65 \\
- \hline
- 8. & Increased batch size   & 128 x128    & \textcolor{red}{\textbf{16}}  & 0.05 & 48.45\% & 1.65 \\
- \hline
- 9. & Increased batch size   & 128 x128    & \textcolor{red}{\textbf{32}}  & 0.05 & 48.45\% & 1.65 \\
- \hline
-\end{tabular}
-\newline
-
-It is clearly seen that the accuracy and error of the model does not vary much by tweaking the hyper parameters.Hence, the U-net architecture can provide a maximum IOU accuracy of 48.45\% and a minimum error of 1.65. For all the obtained results, the training took place for two EPOCHS only. After two EPOCHS, the architecture stops learning and accuracy and error remains same.
+2. \textbf{Expansion Path}: The right half of the U-net where the layers are represented from bottom to top is called expansion path. The expansion path consists of sequence of deconvolution or up-convolution layers and concatenation with high resolution features from the contraction path and unpooling layers. The expansion path gives output data in the same size as the input image data. The expansion path increase the size of the contraction path output data simultaneously decreasing the number of channels.
 
 \section{\textbf{Segnet Architecture}}
 Segnet is designed to perform pixel wise segmentation more efficiently. It consists of an encoder network followed by a decoder network and finally a pixel classification layer. The encoder layer consists of 13 convolution layers similar to VGG16 for object classification. Since each encoder layer has a corresponding decoder layer, there are 13 convolution layers present in decoder layer.
 
-Each encoder layer performs convolution operation to detect the features of the input image. Then, these are batch normalized to reduce the amount by which hidden unit values shift. Finally, a rectified linear unit (ReLU) activation is applied pixel wise followed by max pooling operation. Each decoder layer has a upsampling layer to increase the image size by a factor 2 followed by convolution process. The last decoder layer has a softmax activation function which gives output images whose length is the number of segmented labels present. The figure below shows the segnet architecture[15]:
-\newpage
+Each encoder layer performs convolution operation to detect the features of the input image. Then, these are batch normalized to reduce the amount by which hidden unit values shift. Finally, a rectified linear unit (ReLU) activation is applied pixel wise followed by max pooling operation. Each decoder layer has a upsampling layer to perform unpooling operation and also to increase the image size by a factor 2 followed by convolution layers. The last decoder layer has a softmax activation function which gives output images whose length is the number of segmented labels present. The figure below shows the segnet architecture[15]:
+
 \begin{figure}[h]
     \centering
     \captionsetup{justification=centering}
-    \includegraphics[width=10cm]{segnet}
+    \includegraphics[width=8.5cm]{segnet}
     \caption{Segnet Architecture}
     \label{fig:Binary class segmented output}
 \end{figure}
 
-\section{Results from Segnet Architecture}
-Segnet architecture was trained and tested on bdd-dataset[16] and obtained a mIOU accuracy of 48.45\% and a loss of 2.0201. The results obtained does not differ from U-net due to similarity in architecture.The following are the segmented results obtained by implementing the segnet architecture using tensorflow:
+\section{\textbf{IC-net Architecture}}
+The full form of IC-net is image cascade network. IC-net architecture is designed to make sematic segmentation faster while not compromising too much on the accuracy. IC-net is a highly efficient semantic segmentation system with descent quality. IC-net architecture is shown below[18]:
 
 \begin{figure}[h]
     \centering
     \captionsetup{justification=centering}
-    \includegraphics[width=10cm]{segres}
-    \caption{Segnet output}
+    \includegraphics[width=9cm]{ic-net.JPG}
+    \caption{IC-net Architecture}
     \label{fig:Binary class segmented output}
 \end{figure}
+
+IC-net architecture takes cascade image inputs i.e the resolution of the input image is varied into three categories of low, medium and high resolution images and are fed as inputs to the architecture in a cascaded form. As the semantic segmentation using of resolution images is computationally expensive and slow, the low resolution image (1/4 of original image) is fed into PSPnet architecture for semantic segmentation. The PSPnet architecture outputs segmented image with resolution 1/32 of the original image. As we decreased the resolution of the image, the quality of semantic segmentation is reduced. To preserve the quality, the medium (1/2 of the original image) and high (original image) resolution image are used to refine the prediction process. The medium and high resolution images are passed through light weighted CNNs which are less computationally expensive and takes less to extract features. Thus, the outputs obtained from different resolution branches are fused using cascaded feature fusion unit (CFF) and trained using cascade label guidance.
+\newline
+\\
+\textbf{Cascaded Feature Fusion Unit:}
+Cascaded Feature Fusion Unit combines the features extracted from the outputs obtained from different CNN architectures of different resolution and outputs combined feature vector with the desired resolution. The unit takes 2 input feature maps (F1 and F2) and 1 ground truth label (LABEL) as input. First, the unit converts the feature map F1 into same resolution by performing upsampling operation.Then refinement of features is done through dilation convolution operation. The feature map F2 undergoes projection convolution wuth 1x1 kernel to ouput same number of channels as feature map F1. Then, the two feature maps undergoes element wise sum in SUM layer followed by 'RELU' layer to obtained a fused feature map[18]. 
+\newline
+\\
+\textbf{Cascaded Label Guidance Unit:}
+Cascaded Label Guidance strategy is used to enhance the learning of the IC-net architecture. It uses different resolutions (low, medium and high) of ground truth label for different resolution branches(low, medium and high). The weighted softmax cross entropy loss is calculated for each resolution branch with relative loss weight. This ultimately minimized the loss function of the IC-net architecture[18].
 
 \begin{figure}[h]
     \centering
     \captionsetup{justification=centering}
-    \includegraphics[width=10cm]{segla}
-    \caption{Segnet loss and accuracy}
+    \includegraphics[width=8.5cm]{cee.JPG}
+    \caption{Cascaded Feature Fusion}
     \label{fig:Binary class segmented output}
 \end{figure}
 
-\section{\textbf{Results from Running in AWS}}
+\section{\textbf{Resnet34 Architecture}}
+The full form of Resnet is Residual network and the number 34 signifies the number of layers in the Resnet architecture. The Resnet architecture mainly address the degradation problem which arises with architecture's increasing depth. When the number of layers in the CNN increases the accuracy becomes saturated and begin to decrease drastically. Resnet architecture presents a solution to this problem by introducing residual or shortcut connections. The residual or shortcut connections means to add previous layer output with some train error to output obtained after passing it through the convolutional layer. This ensures that the resulting train error will not increase with increasing depth of the architecture. If the input and output layer have same dimensions, then the shortcut connections are applied directly or the output is padded with zeroes to match input dimension or undergoes 1x1 convolution to match the input layer dimensions. The Resnet34 architecture is shown in the figure below[19]: 
 
-The following are the results obtained by running U-net model in AWS giving various tweaks to the hyper parameters:
+\newpage
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=3.8cm]{resnet.JPG}
+    \caption{Resnet Architecture}
+    \label{fig:Binary class segmented output}
+\end{figure}
 
+\section{\textbf{Implementation:}}
+The details of the implementation of the above mentioned architecture and required dependencies are given below:
 \begin{enumerate}
-    \item \textbf{With Batch size of 16}
-\newline
+\item Language Used: Python version - 3.8
 
-\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
- \hline
- \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
- \hline
- \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
- \hline
- 1. & 41   & 256 x256    & 16  & 0.01 & 48.45\% & 2.8794 \\
- \hline
-\end{tabular}
+\item Packages Used: Tensorflow version - 2.2.0, Numpy, cv2
 
-\newpage
-\textbf{U-net segmented Output}
+\item Software Used: Jupyter Notebook
 
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{U-net-B16-S256-im.JPG}
-    \caption{U-net segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
+\item Github Link: \textcolor{blue}{\underline{\url{https://github.com/Eashwar-S/Semantic_Segmentation}}}
 
-\textbf{U-net MIOU accuracy and Loss}
+\item Cloud Service Used: AWS Sagemaker
 
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{U-net-B16-S256-gr.JPG}
-    \caption{U-net segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-\item \textbf{With increased batch size of 32:}
-\newline
-\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
- \hline
- \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
- \hline
- \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
- \hline
- 1. & 41   & 256 x256    & 32  & 0.01 & 48.46\% & 2.8746 \\
- \hline
-\end{tabular}
-\newline
-
-\textbf{U-net segmented Output}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{U-net-B32-S256-im.JPG}
-    \caption{U-net segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-\textbf{U-net MIOU accuracy and Loss}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{U-net-B32-S256-gr.JPG}
-    \caption{U-net segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-
-\item \textbf{With increased image size of 512 and batch size of 8:}
-\newline
-\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
- \hline
- \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
- \hline
- \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
- \hline
- 1. & 41   & 512 x512   & 8  & 0.01 & 48.41\% & 2.1745 \\
- \hline
-\end{tabular}
-
-\newpage
-
-\textbf{U-net segmented Output}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{U-net-B8-S512-im.JPG}
-    \caption{U-net segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-
-\textbf{U-net MIOU accuracy and Loss}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{U-net-B8-S512-gr.JPG}
-    \caption{U-net segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-\item \textbf{With 20 classes:}
-\newline
-\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
- \hline
- \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
- \hline
- \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
- \hline
- 1. & 20   & 256 x256   & 16  & 0.01 & 31.78\% & 1.7894 \\
- \hline
-\end{tabular}
-
-
-\textbf{U-net segmented Output}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{U-net-B16-S256-C20-im.JPG}
-    \caption{U-net segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-
-\textbf{U-net MIOU accuracy and Loss}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{U-net-B16-S256-C20-gr.JPG}
-    \caption{U-net segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-\newpage
-
-\item \textbf{With 20 classes and batch size 32:}
-\newline
-\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
- \hline
- \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
- \hline
- \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
- \hline
- 1. & 20   & 256 x256   & 32  & 0.01 & 31.73\% & 2.1943 \\
- \hline
-\end{tabular}
-
-
-\textbf{U-net segmented Output}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{U-net-B32-S256-C20-im.JPG}
-    \caption{U-net segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-
-\textbf{U-net MIOU accuracy and Loss}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{U-net-B32-S256-C20-gr.JPG}
-    \caption{U-net segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-\item \textbf{With 20 classes and image size 512:}
-\newline
-\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
- \hline
- \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
- \hline
- \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
- \hline
- 1. & 20   & 512 x512   & 8  & 0.01 & 31.70\% & 2.01393 \\
- \hline
-\end{tabular}
-
-
-\textbf{U-net segmented Output}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{U-net-B8-S512-C20-im.JPG}
-    \caption{U-net segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-
-\textbf{U-net MIOU accuracy and Loss}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{U-net-B32-S256-C20-gr.JPG}
-    \caption{U-net segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
+\item Cloud Storage used: AWS S3 bucket storage
 
 \end{enumerate}
 
+\section{\textbf{Cityscrapes Dataset:}}
+Cityscrapes dataset consisted of 5000 images and labels. 2975 images were used for training, 500 for validation and remaining 1525 images were used for testing. The are a total of 29 classes present in the dataset.
 
-The following are the results obtained by running Segnet model in AWS giving various tweaks to the hyper parameters:
+\section{\textbf{Results}}
+Semantic segmentation was performed using U-net, Segnet, IC-net and Resnet34 architectures and the below table represents the results obtained with architectures arranged in ascending order based on their performance and accuracy.
 
-\begin{enumerate}
-    \item \textbf{With Batch size of 16}
-\newline
-
-\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
+\begin{tabular}{ |p{0.6cm}|p{1.8cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
  \hline
- \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
+ \multicolumn{7}{|c|}{\textbf{Architecture Results}} \\
  \hline
- \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
+ \textbf{Sno} & \textbf{Architecture} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
  \hline
- 1. & 41   & 256 x256    & 16  & 0.01 & 48.45\% & 2.3080 \\
+ 1. & U-net   & 256 x256    & 16  & 0.001 & 53.29\% & 0.3350 \\
  \hline
-\end{tabular}
-
-\textbf{Segnet segmented Output}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{Segnet-B16-S256-im.JPG}
-    \caption{Segnet segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-\textbf{Segnet MIOU accuracy and Loss}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{Segnet-B16-S256-gr.JPG}
-    \caption{Segnet segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-\item \textbf{With increased batch size of 32:}
-\newline
-\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
+ 2. & IC-net   & 256 x256    & 16 & 0.001 & 48.39\% & 0.4134 \\
  \hline
- \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
+ 3. & Segnet   & 256 x256    & 16  & 0.001 & 48.39\% & 0.5001 \\
  \hline
- \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
- \hline
- 1. & 41   & 256 x256    & 32  & 0.01 & 48.45\% & 3.1875 \\
- \hline
-\end{tabular}
-\newline
-
-\textbf{Segnet segmented Output}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{Segnet-B32-S256-im.JPG}
-    \caption{Segnet segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-\textbf{Segnet MIOU accuracy and Loss}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{Segnet-B32-S256-gr.JPG}
-    \caption{Segnet segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-
-\item \textbf{With increased image size of 512 and batch size of 8:}
-\newline
-\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
- \hline
- \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
- \hline
- \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
- \hline
- 1. & 41   & 512 x512   & 8  & 0.01 & 48.42\% & 2.3623 \\
+ 4. & Resnet34   & 256 x256    & 16  & 0.001 & 47.37\% & 0.4943 \\
  \hline
 \end{tabular}
 
-\textbf{Segnet segmented Output}
-
+\subsection{\textbf{Segmented Output}} 
+The following are the results of the segmented output obtained by U-net, IC-net, segnet and resnet architectures for the same input image are given below respectively:
 \begin{figure}[h]
     \centering
     \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{Segnet-B8-S512-im.JPG}
-    \caption{Segnet segmented output}
+    \includegraphics[width=8.1cm]{seg.JPG}
+    \caption{Segmented Results}
     \label{fig:Binary class segmented output}
 \end{figure}
-
-
-\textbf{Segnet MIOU accuracy and Loss}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{Segnet-B8-S512-gr.JPG}
-    \caption{Segnet segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-\item \textbf{With 20 classes:}
-\newline
-\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
- \hline
- \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
- \hline
- \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
- \hline
- 1. & 20   & 256 x256   & 16  & 0.01 & 31.74\% & 1.7805 \\
- \hline
-\end{tabular}
-
-
-\textbf{Segnet segmented Output}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{Segnet-B16-S256-C20-im.JPG}
-    \caption{Segnet segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-
-\textbf{Segnet MIOU accuracy and Loss}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{Segnet-B16-S256-C20-gr.JPG}
-    \caption{Segnet segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
 \newpage
 
-\item \textbf{With 20 classes and batch size 32:}
-\newline
-\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
- \hline
- \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
- \hline
- \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
- \hline
- 1. & 20   & 256 x256   & 32  & 0.01 & 31.73\% & 1.8175 \\
- \hline
-\end{tabular}
-
-
-\textbf{Segnet segmented Output}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{Segnet-B32-S256-C20-im.JPG}
-    \caption{Segnet segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-
-\textbf{Segnet MIOU accuracy and Loss}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{Segnet-B32-S256-C20-gr.JPG}
-    \caption{Segnet segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-\item \textbf{With 20 classes and image size 512:}
-\newline
-\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
- \hline
- \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
- \hline
- \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
- \hline
- 1. & 20   & 512 x512   & 8  & 0.01 & 31.70\% & 1.7675 \\
- \hline
-\end{tabular}
-
-
-\textbf{Segnet segmented Output}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{Segnet-B8-S512-C20-im.JPG}
-    \caption{Segnet segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-
-\textbf{Segnet MIOU accuracy and Loss}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8cm]{Segnet-B32-S256-C20-gr.JPG}
-    \caption{Segnet segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-
-\end{enumerate}
-
-\section{\textbf{Cityscrapes Dataset}}
-Semantic segmentation was performed on Cityscrapes dataset which consisted of 5000 images and labels. 2975 images were used for training, 500 for validation and remaining 1525 images were used for testing. The following are the results obtained by testing different architectures on the dataset. The training took a total of 22 EPOCHS.
-
-\subsection{\textbf{U-net}} U-net architecture gave a maximum Mean IOU accuracy of 53.29\%. The following images shows the outputs obtained:
-
-\textbf{With 29 classes and batch size 16:}
-\newline
-
-\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
- \hline
- \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
- \hline
- \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
- \hline
- 1. & 29   & 256 x256   & 16  & 0.01 & 53.29\% & 0.3350 \\
- \hline
-\end{tabular}
-
-\textbf{U-net segmented Output}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8.5cm]{U-net-cityscrapes-B16-im.JPG}
-    \caption{U-net segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-
-\textbf{U-net MIOU accuracy and Loss}
+\subsection{\textbf{MIOU accuracy and Loss}} 
+The following are the graphs of MIOU accuracy and categorical cross entropy loss with respect to number of EPOCHS. The left half of the graph represents the result of training and the right half is for validation.
 
 \begin{figure}[h]
     \centering
     \captionsetup{justification=centering}
     \includegraphics[width=8.5cm]{U-net-cityscrapes-B16-gr.JPG}
-    \caption{U-net Precision vs Recall Graph}
+    \caption{U-net MIOU accuracy and Loss}
     \label{fig:Binary class segmented output}
 \end{figure}
-
-\textbf{U-net Precision vs Recall Graph}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8.5cm]{U-net-cityscrapes-B16-p-vs-re.JPG}
-    \caption{U-net segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-\newpage
-The following are the IOU accuracy of each class:
-
-\textbf{U-net IOU accuracy per class}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=9cm]{U-net-cityscrapes-B16-IOU-C29.JPG}
-    \caption{U-net IOU accuracy per class}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-\subsection{\textbf{Segnet}} Segnet architecture gave a maximum Mean IOU accuracy of 47.37\%. The following images shows the outputs obtained:
-
-\textbf{With 29 classes and batch size 16:}
-\newline
-
-\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
- \hline
- \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
- \hline
- \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
- \hline
- 1. & 29   & 256 x256   & 16  & 0.01 & 47.37\% & 0.4943 \\
- \hline
-\end{tabular}
-\textbf{Segnet segmented Output}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8.5cm]{Segnet-cityscrapes-B16-im.JPG}
-    \caption{Segnet segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-\newpage
-\textbf{Segnet MIOU accuracy and Loss}
 
 \begin{figure}[h]
     \centering
     \captionsetup{justification=centering}
     \includegraphics[width=8.5cm]{Segnet-cityscrapes-B16-gr.JPG}
-    \caption{Segnet Precision vs Recall Graph}
+    \caption{Segnet MIOU accuracy and Loss}
     \label{fig:Binary class segmented output}
 \end{figure}
-
-\textbf{Segnet Precision vs Recall Graph}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8.5cm]{Segnet-cityscrapes-B16-p-vs-re.JPG}
-    \caption{Segnet segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-The following are the IOU accuracy of each class:
-
-\textbf{Segnet IOU accuracy per class}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=9cm]{Segnet-cityscrapes-B16-IOU-C29.JPG}
-    \caption{Segnet IOU accuracy per class}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-
-\subsection{\textbf{ICnet}} ICnet architecture gave a maximum Mean IOU accuracy of 48.39\%. The following images shows the outputs obtained:
-
-\textbf{With 29 classes and batch size 16:}
-\newline
-
-\begin{tabular}{ |p{0.6cm}|p{1.2cm}|p{0.6cm}|p{0.6cm}|p{0.6cm}|p{0.8cm}|p{0.8cm}|}
- \hline
- \multicolumn{7}{|c|}{\textbf{Tweaking Hyper parameters}} \\
- \hline
- \textbf{Sno} & \textbf{Classes} & \textbf{Img size} & \textbf{batch size} & \textbf{L.R} & \textbf{IOU Accu.} & \textbf{Loss} \\
- \hline
- 1. & 29   & 256 x256   & 16  & 0.01 & 48.39\% & 0.4134 \\
- \hline
-\end{tabular}
-
-\textbf{ICnet segmented Output}
-
-\begin{figure}[h]
-    \centering
-    \captionsetup{justification=centering}
-    \includegraphics[width=8.5cm]{icnet-cityscrapes-B16-im.JPG}
-    \caption{ICnet segmented output}
-    \label{fig:Binary class segmented output}
-\end{figure}
-
-
-\textbf{ICnet MIOU accuracy and Loss}
 
 \begin{figure}[h]
     \centering
     \captionsetup{justification=centering}
     \includegraphics[width=8.5cm]{ICnet-cityscrapes-B16-gr.JPG}
-    \caption{ICnet Precision vs Recall Graph}
+    \caption{ICnet MIOU accuracy and Loss}
     \label{fig:Binary class segmented output}
 \end{figure}
 
-\textbf{ICnet Precision vs Recall Graph}
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8.5cm]{Resnet-cityscrapes-B16-gr.JPG}
+    \caption{Resnet MIOU accuracy and Loss}
+    \label{fig:Binary class segmented output}
+\end{figure}
+\newpage
+
+\subsection{\textbf{Precision vs Recall Graph}}
+The following are the graphs of Precision vs Recall for 4 architectures. The left half of the graph represents the result of training and the right half is for validation.
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8.5cm]{U-net-cityscrapes-B16-p-vs-re.JPG}
+    \caption{U-net Precision vs Recall Graph}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8.5cm]{Segnet-cityscrapes-B16-p-vs-re.JPG}
+    \caption{Segnet Precision vs Recall Graph}
+    \label{fig:Binary class segmented output}
+\end{figure}
 
 \begin{figure}[h]
     \centering
     \captionsetup{justification=centering}
     \includegraphics[width=8.5cm]{ICnet-cityscrapes-B16-p-vs-re.JPG}
-    \caption{ICnet segmented output}
+    \caption{ICnet Precision vs Recall Graph}
     \label{fig:Binary class segmented output}
 \end{figure}
-
-\newpage
-The following are the IOU accuracy of each class:
-
-\textbf{ICnet IOU accuracy per class}
 
 \begin{figure}[h]
     \centering
     \captionsetup{justification=centering}
-    \includegraphics[width=9cm]{ICnet-cityscrapes-B16-IOU-C29.JPG}
-    \caption{ICnet IOU accuracy per class}
+    \includegraphics[width=8.5cm]{Resnet-cityscrapes-B16-p-vs-re.JPG}
+    \caption{Resnet Precision vs Recall Graph}
     \label{fig:Binary class segmented output}
 \end{figure}
+
+\newpage
+
+\subsection{\textbf{IOU accuracy of each class}}
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=7.5cm]{U-net-cityscrapes-B16-IOU-C29.JPG}
+    \caption{U-net IOU per class}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=7.5cm]{Segnet-cityscrapes-B16-IOU-C29.JPG}
+    \caption{Segnet IOU per class}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=7.5cm]{Resnet-cityscrapes-B16-IOU-C29.JPG}
+    \caption{Resnet IOU per class}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=7cm]{ICnet-cityscrapes-B16-IOU-C29.JPG}
+    \caption{IC-net IOU per class}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+In all the architectures, class road was detected most accurately.\\
+1. U-net : 91.998\% \\
+2. Segnet : 89.082\% \\
+3. IC-net : 68.287\% \\
+4. Resnet : 33.421\% \\
+\newpage
+
+\section{\textbf{Amazon Web Services}}
+Amazon web services was used to train the neural net models as powerful GPUs were required to perform convolution operation on big dataset like cityscrapes. The dataset was uploaded to Amazon cloud storage service called S3 bucket. Then, using one of the service of AWS called Sagemaker jupyter notebook was launched. The dataset stored on the S3 bucket storage device was made public in order to access the dataset from Sagemaker. The below diagram shows how to dataset is handled:
+
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=8.5cm]{aws.JPG}
+    \caption{Accesing the dataset from cloud}
+    \label{fig:Binary class segmented output}
+\end{figure}
+
+AWS does not give GPU capabilities to its user by default. Therefore, GPU request need to be sent by the user to the AWS service explaining the need for the GPU. The above mentioned process was followed and the following GPU was allocated:
+\begin{enumerate}
+    \item GPU name : Tesla 1xK80
+    \item Instance type: ml.p2.x.large instance
+    \item number of vCPUs : 4
+    \item RAM : 61 GB
+    \item GPU Memory: 12 GB
+\end{enumerate}
+
+\section{\textbf{Conclusion}}
+An in depth study of convolutional neural networks used for semantic segmentation is obtained. Different CNN architectures like U-net, Segnet, Resnet and IC-net have been studied and implemented and the results have been compared. By comparing the results, it us seen that U-net performs better than other architectures with a MIOU accuracy of 53.29\%. The reason U-net performs better is because in its expansion path, the concatenation of high resolution images from the contraction takes place. This restores the features lost during the upconvolution operation. Hence, it is recommended to use U-net for multiclass semantic segmentation.
 
 \section{\textbf{References:}}
 \begin{enumerate}
@@ -1094,6 +598,12 @@ The following are the IOU accuracy of each class:
 \item Badrinarayanan, Vijay, et al. “SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation.” ArXiv.org, 10 Oct. 2016, arxiv.org/abs/1511.00561.
 
 \item Profile, bdd-data.berkeley.edu/portal.html.
+
+\item Ronneberger, O., Fischer, P.; Brox, T. (2015, May 18). U-Net: Convolutional Networks for Biomedical Image Segmentation. Retrieved August 20, 2020, from https://arxiv.org/abs/1505.04597
+
+\item Zhao, H., Qi, X., Shen, X., Shi, J.; Jia, J. (2018, August 20). ICNet for Real-Time Semantic Segmentation on High-Resolution Images. Retrieved August 20, 2020, from https://arxiv.org/abs/1704.08545
+
+\item He, K., Zhang, X., Ren, S.,; Sun, J. (2015, December 10). Deep Residual Learning for Image Recognition. Retrieved August 20, 2020, from https://arxiv.org/abs/1512.03385
 \end{enumerate}
 
 \end{document}
