@@ -33,7 +33,7 @@ eashwar@umd.edu \hspace{2in} scharifa@umd.edu
 \begin{document}
 \maketitle
 \begin{abstract}
-Human beings are easily able to identify and differentiate objects based on their cognitive skills. Cognitive skills like category formation, pattern recognition, working memory etc help humans to segment and process visual information obtained through eyes. But, a machine process visual data differently in the form of matrix containing whole numbers known as pixels. Each pixel indicates the brightness levels at that particular location. As the machine does not posses cognitive capability to segment images, a convolution neural net is designed and built through which the machine learns to segment images. The segmentation performed is called semantic segmentation as it groups every pixel of the image into classes based on labels. The report describes and implements convolutional neural networks like U-net, Segnet, IC-net and Resnet34, compare the results obtained and recommends the best architecture for semantic segmentation.
+Human beings are easily able to identify and differentiate objects based on their cognitive skills. Cognitive skills like category formation, pattern recognition, working memory etc help humans to segment and process visual information obtained through eyes. But, a machine process visual data differently in the form of matrix containing whole numbers known as pixels. Each pixel indicates the brightness levels at that particular location. As the machine does not posses cognitive capability to segment images, a convolution neural net is designed and built through which the machine learns to segment images. The segmentation performed is called semantic segmentation as it groups every pixel of the image into classes based on labels. The report describes and implements convolutional neural networks like U-net[17], Segnet[15], IC-net[18] and Resnet34[19], compare the results obtained and recommends the best architecture for semantic segmentation.
 \end{abstract}
 
 \section{\textbf{Introduction}}
@@ -99,7 +99,7 @@ Pooling layers in a CNN are typically connected after convolutional layers. It r
 \begin{enumerate}
 \item It reduces the number of parameters to train in a CNN.
 
-\item It prevents the neural net from the over-fitting problem. Over fitting is a situation where the neural net obtains high accuracy over training data and less accuracy over the testing data. This usually occurs because of large number of trainable parameters which lets the neural net detect all the patterns in an training image present but fails to learn from the patterns to generalize it on the testing image. This can be observed when the neural net obtains more than 95\% accuracy on the training data but less than 50\% accuracy on the testing data.
+\item It prevents the neural net from the over-fitting problem. Over fitting is a situation where the neural net obtains high accuracy over training data and less accuracy over the testing data. This usually occurs because of large number of trainable parameters which lets the neural net detect all the patterns in an training image present but fails to learn from the patterns to generalize it on the testing image. This can be observed when the neural net obtains high accuracy on the training data but low accuracy on the testing data.
 \newline
 
 \textbf{Commonly used Pooling Layers:} Average pooling and max pooling are the two most commonly used pooling layers in neural network.
@@ -256,11 +256,11 @@ Tanh function is a scaled version of sigmoid function. The gradient of the point
 
 Relu is non-linear in nature as it remains zero for all the negative values which allows neural net to have multiple layers. In addition to this, most of the neurons in the neural net never fire up due to the characteristics of Relu function. This makes the neural net lighter. This makes Relu function less computationally expensive than Sigmoid and Tanh functions.
 
-The disadvantage of Relu function is that for negative values the gradient remains remains zero. This means that some neurons in the neural net will not respond to the change in the output. This is called dying Relu problem.
+The disadvantage of Relu function is that for negative values the gradient remains zero. This means that some neurons in the neural net will not respond to the change in the output. This is called dying Relu problem.
 \end{enumerate} 
 
 \subsection{\textbf{Fully Connected Layer:}}
-In neural network, a fully connected later is that layer which connects the inputs of one layer to every activation unit of the next layer. Typically, a fully connected layer is present before the output layer. In a neural net each unit in a convolutional layer contains a feature of the input image essentially an edge. Hence, each convolutional layer is a collection of features of the input image. A fully connected layer holds the composite and aggregate features of all the convolution layers. Hence, a fully connected layer is a feature vector of the input image. The following figure shows an example of a fully connected layer:[8]
+In neural network, a fully connected later is that layer which connects the inputs of one layer to every activation unit of the next layer. Typically, a fully connected layer is present before the output layer. In a neural net each unit in a convolutional layer contains a feature of the input image. Hence, each convolutional layer is a collection of features of the input image. A fully connected layer holds the composite and aggregate features of all the convolution layers. Hence, a fully connected layer is a feature vector of the input image. The following figure shows an example of a fully connected layer:[8]
 
 \begin{figure}[h]
     \centering
@@ -304,6 +304,9 @@ The output layer is the final layer of CNN. The output layer takes input from th
     \caption{Softmax Activation Function Example}
     \label{fig:Softmax Activation Function Example}
 \end{figure}
+
+\section{Architectures}
+Generally, there are many architectures found in the literature which are used for different purposes like natural language processing, segmentation and tracking. The upcoming sections will discuss about the main architectures which are used for semantic segmentation.
 \newpage
 \section{\textbf{U-net Architecture}}
 U-net is popularly used CNN for segmentation. The name U-net comes from the fact that the layers in the CNN are arranged in U shape. The below figure shows the U-net architecture[17]:
@@ -324,7 +327,7 @@ The U-net architecture consists of two path. They are:\\
 2. \textbf{Expansion Path}: The right half of the U-net where the layers are represented from bottom to top is called expansion path. The expansion path consists of sequence of deconvolution or up-convolution layers and concatenation with high resolution features from the contraction path and unpooling layers. The expansion path gives output data in the same size as the input image data. The expansion path increase the size of the contraction path output data simultaneously decreasing the number of channels.
 
 \section{\textbf{Segnet Architecture}}
-Segnet is designed to perform pixel wise segmentation more efficiently. It consists of an encoder network followed by a decoder network and finally a pixel classification layer. The encoder layer consists of 13 convolution layers similar to VGG16 for object classification. Since each encoder layer has a corresponding decoder layer, there are 13 convolution layers present in decoder layer.
+Segnet is designed to perform pixel wise segmentation more efficiently. It consists of an encoder network followed by a decoder network and finally a pixel classification layer. The encoder layer consists of 13 convolution layers similar to VGG16[20] for object classification. Since each encoder layer has a corresponding decoder layer, there are 13 convolution layers present in decoder layer.
 
 Each encoder layer performs convolution operation to detect the features of the input image. Then, these are batch normalized to reduce the amount by which hidden unit values shift. Finally, a rectified linear unit (ReLU) activation is applied pixel wise followed by max pooling operation. Each decoder layer has a upsampling layer to perform unpooling operation and also to increase the image size by a factor 2 followed by convolution layers. The last decoder layer has a softmax activation function which gives output images whose length is the number of segmented labels present. The figure below shows the segnet architecture[15]:
 
@@ -347,11 +350,11 @@ The full form of IC-net is image cascade network. IC-net architecture is designe
     \label{fig:Binary class segmented output}
 \end{figure}
 
-IC-net architecture takes cascade image inputs i.e the resolution of the input image is varied into three categories of low, medium and high resolution images and are fed as inputs to the architecture in a cascaded form. As the semantic segmentation using of resolution images is computationally expensive and slow, the low resolution image (1/4 of original image) is fed into PSPnet architecture for semantic segmentation. The PSPnet architecture outputs segmented image with resolution 1/32 of the original image. As we decreased the resolution of the image, the quality of semantic segmentation is reduced. To preserve the quality, the medium (1/2 of the original image) and high (original image) resolution image are used to refine the prediction process. The medium and high resolution images are passed through light weighted CNNs which are less computationally expensive and takes less to extract features. Thus, the outputs obtained from different resolution branches are fused using cascaded feature fusion unit (CFF) and trained using cascade label guidance.
+IC-net architecture takes cascade image inputs i.e the resolution of the input image is varied into three categories of low, medium and high resolution images and are fed as inputs to the architecture in a cascaded form. As the semantic segmentation using of resolution images is computationally expensive and slow, the low resolution image (1/4 of original image) is fed into PSPnet[21] architecture for semantic segmentation. The PSPnet[21] architecture outputs segmented image with resolution 1/32 of the original image. As we decreased the resolution of the image, the quality of semantic segmentation is reduced. To preserve the quality, the medium (1/2 of the original image) and high (original image) resolution image are used to refine the prediction process. The medium and high resolution images are passed through light weighted CNNs which are less computationally expensive and takes less to extract features. Thus, the outputs obtained from different resolution branches are fused using cascaded feature fusion unit (CFF) and trained using cascade label guidance.
 \newline
 \\
 \textbf{Cascaded Feature Fusion Unit:}
-Cascaded Feature Fusion Unit combines the features extracted from the outputs obtained from different CNN architectures of different resolution and outputs combined feature vector with the desired resolution. The unit takes 2 input feature maps (F1 and F2) and 1 ground truth label (LABEL) as input. First, the unit converts the feature map F1 into same resolution by performing upsampling operation.Then refinement of features is done through dilation convolution operation. The feature map F2 undergoes projection convolution wuth 1x1 kernel to ouput same number of channels as feature map F1. Then, the two feature maps undergoes element wise sum in SUM layer followed by 'RELU' layer to obtained a fused feature map[18]. 
+Cascaded Feature Fusion Unit combines the features extracted from the outputs obtained from different CNN architectures of different resolution and outputs combined feature vector with the desired resolution. The unit takes 2 input feature maps (F1 and F2) and 1 ground truth label (LABEL) as input. First, the unit converts the feature map F1 into same resolution by performing upsampling operation.Then refinement of features is done through dilation convolution operation. The feature map F2 undergoes projection convolution with 1x1 kernel to output same number of channels as feature map F1. Then, the two feature maps undergoes element wise sum in SUM layer followed by 'RELU' layer to obtained a fused feature map[18]. 
 \newline
 \\
 \textbf{Cascaded Label Guidance Unit:}
@@ -366,7 +369,7 @@ Cascaded Label Guidance strategy is used to enhance the learning of the IC-net a
 \end{figure}
 
 \section{\textbf{Resnet34 Architecture}}
-The full form of Resnet is Residual network and the number 34 signifies the number of layers in the Resnet architecture. The Resnet architecture mainly address the degradation problem which arises with architecture's increasing depth. When the number of layers in the CNN increases the accuracy becomes saturated and begin to decrease drastically. Resnet architecture presents a solution to this problem by introducing residual or shortcut connections. The residual or shortcut connections means to add previous layer output with some train error to output obtained after passing it through the convolutional layer. This ensures that the resulting train error will not increase with increasing depth of the architecture. If the input and output layer have same dimensions, then the shortcut connections are applied directly or the output is padded with zeroes to match input dimension or undergoes 1x1 convolution to match the input layer dimensions. The Resnet34 architecture is shown in the figure below[19]: 
+The full form of Resnet is Residual network and the number 34 signifies the number of layers in the Resnet architecture. The Resnet architecture mainly address the degradation problem which arises with architecture's increasing depth. When the number of layers in the CNN increases the accuracy becomes saturated and begin to decrease drastically. Resnet architecture presents a solution to this problem by introducing residual or shortcut connections. The residual or shortcut connections means to add previous layer output with some train error to output obtained after passing it through the convolutional layer. This ensures that the resulting trained error will not increase with increasing depth of the architecture. If the input and output layer have same dimensions, then the shortcut connections are applied directly or the output is padded with zeroes to match input dimension or undergoes 1x1 convolution to match the input layer dimensions. The Resnet34 architecture is shown in the figure below[19]: 
 
 \newpage
 \begin{figure}[h]
@@ -395,7 +398,7 @@ The details of the implementation of the above mentioned architecture and requir
 \end{enumerate}
 
 \section{\textbf{Cityscrapes Dataset:}}
-Cityscrapes dataset consisted of 5000 images and labels. 2975 images were used for training, 500 for validation and remaining 1525 images were used for testing. The are a total of 29 classes present in the dataset.
+Cityscrapes dataset consisted of 5000 images and labels. 2975 images were used for training, 500 for validation and remaining 1525 images were used for testing. There are a total of 29 classes present in the dataset.
 
 \section{\textbf{Results}}
 Semantic segmentation was performed using U-net, Segnet, IC-net and Resnet34 architectures and the below table represents the results obtained with architectures arranged in ascending order based on their performance and accuracy.
@@ -415,8 +418,9 @@ Semantic segmentation was performed using U-net, Segnet, IC-net and Resnet34 arc
  4. & Resnet34   & 256 x256    & 16  & 0.001 & 47.37\% & 0.4943 \\
  \hline
 \end{tabular}
-
-\subsection{\textbf{Segmented Output}} 
+\\
+\begin{itemize}
+    \item \textbf{Segmented Output}
 The following are the results of the segmented output obtained by U-net, IC-net, segnet and resnet architectures for the same input image are given below respectively:
 \begin{figure}[h]
     \centering
@@ -425,9 +429,33 @@ The following are the results of the segmented output obtained by U-net, IC-net,
     \caption{Segmented Results}
     \label{fig:Binary class segmented output}
 \end{figure}
-\newpage
+\end{itemize}
+% \newpage
+% \end{document}
+\end{document}
+% \documentclass{IEEEtran}
+% \usepackage[english]{babel}
+% \usepackage{caption}
+% \usepackage[export]{adjustbox}
+% %\usepackage{comment}
+% \usepackage{hyperref}
+% \usepackage{graphicx}
+% \usepackage{amsmath}
+% %\usepackage{authblk}
+% \graphicspath{{images/}}
+% \usepackage{geometry}
+% \usepackage{array}
+% \usepackage{color,soul}
+% \usepackage{tabularx}
+%  \geometry{
+%  a4paper,
+%  total={170mm,257mm},
+%  left=15mm,
+%  top=15mm,
+%  }
+%  \begin{document}
 
-\subsection{\textbf{MIOU accuracy and Loss}} 
+\textbf{MIOU accuracy and Loss}
 The following are the graphs of MIOU accuracy and categorical cross entropy loss with respect to number of EPOCHS. The left half of the graph represents the result of training and the right half is for validation.
 
 \begin{figure}[h]
@@ -535,6 +563,8 @@ The following are the graphs of Precision vs Recall for 4 architectures. The lef
     \label{fig:Binary class segmented output}
 \end{figure}
 
+% \end{document}
+
 In all the architectures, class road was detected most accurately.\\
 1. U-net : 91.998\% \\
 2. Segnet : 89.082\% \\
@@ -604,7 +634,12 @@ An in depth study of convolutional neural networks used for semantic segmentatio
 \item Zhao, H., Qi, X., Shen, X., Shi, J.; Jia, J. (2018, August 20). ICNet for Real-Time Semantic Segmentation on High-Resolution Images. Retrieved August 20, 2020, from https://arxiv.org/abs/1704.08545
 
 \item He, K., Zhang, X., Ren, S.,; Sun, J. (2015, December 10). Deep Residual Learning for Image Recognition. Retrieved August 20, 2020, from https://arxiv.org/abs/1512.03385
+
+\item Zhang, X., Zou, J., He, K., ; Sun, J. (2015, November 18). Accelerating Very Deep Convolutional Networks for Classification and Detection. Retrieved from https://arxiv.org/abs/1505.06798
+
+\item Zhao, H., Shi, J., Qi, X., Wang, X., ; Jia, J. (2017, April 27). Pyramid Scene Parsing Network. Retrieved August 23, 2020, from https://arxiv.org/abs/1612.01105
 \end{enumerate}
 
-\end{document}
+
+
 
